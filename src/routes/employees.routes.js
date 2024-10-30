@@ -12,6 +12,6 @@ router.post('/employees', createEmployees)
 //*Put es para actualizar todo, y Patch es para hacerlo parcialmente
 router.patch('/employees/:id',updateEmployees )
 
-router.delete('/employees/:id', deleteEmployees)
+router.delete('/employee/:id', deleteEmployees)
 
 export default router

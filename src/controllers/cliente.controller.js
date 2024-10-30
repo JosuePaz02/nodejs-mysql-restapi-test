@@ -1,8 +1,8 @@
 import { pool } from "../db.js";
 
-export const getEmployees = async (req, res) => {
+export const getClientes = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM Trabajadores");
+    const [rows] = await pool.query("SELECT * FROM Clientes");
     res.send(rows);
   } catch (error) {
     return res.status(500).json({
@@ -12,15 +12,15 @@ export const getEmployees = async (req, res) => {
   }
 };
 
-export const getEmployee = async (req, res) => {
+export const getCliente = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM Trabajadores WHERE Id_trab= ?", [
+    const [rows] = await pool.query("SELECT * FROM Clientes WHERE Id_cli= ?", [
       req.params.id,
     ]);
 
     if (rows.length <= 0)
       return res.status(404).json({
-        message: "Employee not found",
+        message: "Cliente not found",
       });
 
     res.json(rows[0]);
@@ -32,27 +32,27 @@ export const getEmployee = async (req, res) => {
   }
 };
 
-export const createEmployees = async (req, res) => {
-  const { Id_trab, nom_tra, apat_trab, amat_trab, sex_trab, nom_puesto } = req.body;
+export const createCliente = async (req, res) => {
+  const { Id_cli, nom_cli, apat_cli, amat_cli, sex_cli, RFC_cli, veh_cli, aseg_cli } = req.body;
   try {
     const [rows] = await pool.query(
-      "INSERT INTO Trabajadores (Id_trab, nom_tra, apat_trab, amat_trab, sex_trab, nom_puesto) VALUES (?, ?, ?, ?, ?, ?)",
-      [Id_trab, nom_tra, apat_trab, amat_trab, sex_trab, nom_puesto]
+      "INSERT INTO Clientes (Id_cli, nom_cli, apat_cli, amat_cli, sex_cli, RFC_cli, veh_cli, aseg_cli) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [Id_cli, nom_cli, apat_cli, amat_cli, sex_cli, RFC_cli, veh_cli, aseg_cli]
     );
-    res.send({message: 'Se ha creado el trabajador',
+    res.send({message: 'Se ha creado el cliente',
       rows: rows.affectedRows
     });
   } catch (error) {
     return res.status(500).json({
       message: "Something goes wrong",
-      error:error.message
+      error: error.message
     });
   }
 };
 
-export const deleteEmployees = async (req, res) => {
+export const deleteCliente = async (req, res) => {
   try {
-    const [result] = await pool.query("DELETE FROM Trabajadores WHERE Id_trab= ?", [
+    const [result] = await pool.query("DELETE FROM Clientes WHERE Id_cli= ?", [
       req.params.id,
     ]);
 
@@ -70,13 +70,13 @@ export const deleteEmployees = async (req, res) => {
   }
 };
 
-export const updateEmployees = async (req, res) => {
+export const updateCliente = async (req, res) => {
   const { id } = req.params;
-  const { nom_tra, apat_trab, amat_trab, nom_puesto } = req.body;
+  const { nom_cli, apat_cli, amat_cli, veh_cli, aseg_cli } = req.body;
   try {
     const [result] = await pool.query(
-      "UPDATE Trabajadores SET nom_tra = IFNULL(?, nom_tra), apat_trab = IFNULL(?, apat_trab), amat_trab = IFNULL(?, amat_trab), nom_puesto = IFNULL(?, nom_puesto) WHERE Id_trab = ?",
-      [nom_tra, apat_trab, amat_trab, nom_puesto, id]
+      "UPDATE Clientes SET nom_cli = IFNULL(?, nom_cli), apat_cli = IFNULL(?, apat_cli), amat_cli = IFNULL(?, amat_cli), veh_cli = IFNULL(?, veh_cli), aseg_cli = IFNULL(?, aseg_cli) WHERE Id_cli = ?",
+      [nom_cli, apat_cli, amat_cli, veh_cli, aseg_cli, id]
     );
 
     if (result.affectedRows === 0)
@@ -84,7 +84,7 @@ export const updateEmployees = async (req, res) => {
         message: "Employee not found",
       });
 
-    const [rows] = await pool.query("SELECT * FROM employees WHERE Id_trab = ?", [
+    const [rows] = await pool.query("SELECT * FROM Clientes WHERE Id_cli = ?", [
       id,
     ]);
 
